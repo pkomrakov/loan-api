@@ -1,0 +1,29 @@
+
+services:
+  api:
+    build: .
+    container_name: loan-api
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/loan_db
+      FLOWISE_API_KEY: ${FLOWISE_API_KEY}
+      API_KEY: ${API_KEY}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:latest
+    container_name: loan-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: loan_db
+    volumes:
+      - db-data:/var/lib/postgresql/loan_db
+    ports:
+      - "5432:5432"
+
+volumes:
+  db-data:
